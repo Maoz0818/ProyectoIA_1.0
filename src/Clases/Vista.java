@@ -12,7 +12,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -199,8 +202,6 @@ public class Vista implements ActionListener, MouseListener{
     }
     
     public void construirMapa() {
-        ArrayList<Nodo> strCamino = nodo.getCamino();
-        
         panelMapa.removeAll();
         panelMapa.updateUI();
         panelMapa.setLayout(new GridLayout(mp.filas, mp.columnas));
@@ -321,8 +322,8 @@ public class Vista implements ActionListener, MouseListener{
             if (mp == null) {
                 JOptionPane.showMessageDialog(jfVentana, "No se ha cargado un mapa");
             } else {
-                construirMapa();
-                reporte();
+                    construirMapaSolucion();
+                    //reporte();
             }
         } else if (e.getSource() == btnSimulacion) {
             //construirMapa();
@@ -418,6 +419,53 @@ public class Vista implements ActionListener, MouseListener{
                 i++;
             }
         }).start();
+    }
+    
+    public void construirMapaSolucion() {
+        AlgoritmosDeBusqueda objAlgoritmos = new AlgoritmosDeBusqueda(mp);
+        int intAlgoritmo = ((Item) cbxAlgoritmo.getSelectedItem()).getId();
+        Nodo nodo2 = objAlgoritmos.init(intAlgoritmo);
+        ArrayList<Nodo> strCamino = nodo2.getCamino();
+        Arrays.asList(strCamino).forEach(n -> System.out.print(n + " "));
+
+//        panelMapa.removeAll();
+//        panelMapa.updateUI();
+//        panelMapa.setLayout(new GridLayout(mp.filas, mp.columnas));
+//        JLabel lbl;
+//        ImageIcon imgIcoUV = new ImageIcon();
+//        hmLabels = new HashMap<>();
+//        for (int i = 0; i < mp.getMapa().length; i++) {
+//            for (int j = 0; j < mp.getMapa()[i].length; j++) {
+//                lbl = new JLabel();
+//                lbl.setToolTipText(i + "," + j);
+//                switch (mp.mapa[i][j]) {
+//                    case Mapa.OBSTACULO:
+//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/muro.png"));
+//                        break;
+//                    case Mapa.ROBOT:
+//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+//                        break;
+//                    case Mapa.ROBOT_ENEMIGO:
+//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
+//                        break;
+//                    case Mapa.OBJETIVO:
+//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.png"));
+//                        break;
+//                    case 0:
+//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
+//                        break;
+//                }
+//                Image image = imgIcoUV.getImage();
+//                Image newimg = image.getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
+//                imgIcoUV = new ImageIcon(newimg);
+//                lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+//                lbl.setIcon(imgIcoUV);
+//                lbl.setHorizontalAlignment(JLabel.CENTER);
+//                hmLabels.put(i + "," + j, lbl);
+//                panelMapa.add(lbl);
+//            }
+//        }
+//        panelMapa.updateUI();
     }
     
     @Override
