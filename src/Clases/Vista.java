@@ -199,6 +199,8 @@ public class Vista implements ActionListener, MouseListener{
     }
     
     public void construirMapa() {
+        ArrayList<Nodo> strCamino = nodo.getCamino();
+        
         panelMapa.removeAll();
         panelMapa.updateUI();
         panelMapa.setLayout(new GridLayout(mp.filas, mp.columnas));

@@ -127,7 +127,6 @@ public class Nodo implements Comparable<Nodo> {
         return h;
     }
     
-    
     public boolean evitarCiclos(Nodo nodo, int posX, int posY){  
         ArrayList<int[]> rama = new ArrayList<>();
         Queue<Nodo> aux;
@@ -161,10 +160,9 @@ public class Nodo implements Comparable<Nodo> {
         Collections.reverse(lsCamino);
         return lsCamino;
     }
-        
+    
     @Override
     public int compareTo(Nodo o) {
-        
         switch(o.compare){
             case 0:
                 //System.out.println("compareTo con costo");

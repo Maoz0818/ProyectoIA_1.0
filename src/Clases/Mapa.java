@@ -19,7 +19,7 @@ public class Mapa implements Cloneable {
     public static ArrayList<String> LIST_OBJETIVOS;
 
     int[][] mapa;
-    int[][] auxMapa;
+    int[][] solucionMapa;
     int balas;
     int[] estadoInicial = new int[2];
     int[] estadoFinal = new int[2];
@@ -29,9 +29,9 @@ public class Mapa implements Cloneable {
     private ArrayList<String> listPosObjetivo;
 
     @Override
-    public Mapa_Anterior clone() throws CloneNotSupportedException {
+    public Mapa clone() throws CloneNotSupportedException {
         try {
-            final Mapa_Anterior result = (Mapa_Anterior) super.clone();
+            final Mapa result = (Mapa) super.clone();
             // copy fields that need to be copied here!
             return result;
         } catch (final CloneNotSupportedException ex) {
@@ -39,7 +39,7 @@ public class Mapa implements Cloneable {
         }
     }
         
-    public Mapa(File flMapa) {
+public Mapa(File flMapa) {
         this.listPosObjetivo = new ArrayList<>();
         LIST_OBJETIVOS = new ArrayList<>();
         String linea;
@@ -68,7 +68,8 @@ public class Mapa implements Cloneable {
             this.columnas = intColumna;
 
             this.mapa = new int[intFila][intColumna];
-            this.auxMapa = new int[intFila][intColumna];
+            this.solucionMapa = new int[intFila][intColumna];
+            
             intFila = 0;
             while ((linea = br.readLine()) != null) {
                 String[] strColumn = linea.split(delimitador);
@@ -90,6 +91,7 @@ public class Mapa implements Cloneable {
                         }
                         this.intCountObjetivo = strColumn[i].equals(String.valueOf(OBJETIVO)) ? this.intCountObjetivo + 1 : this.intCountObjetivo;
                         this.mapa[intFila][i] = Integer.parseInt(strColumn[i]);
+                        this.solucionMapa[intFila][i] = Integer.parseInt(strColumn[i]);
                     }
                 intFila += 1;
                 }else{
@@ -108,13 +110,13 @@ public class Mapa implements Cloneable {
             }
         }
     }
-
-    public int[][] getAuxMapa() {
-        return auxMapa;
+    
+    public int[][] getSolucionMapa() {
+        return solucionMapa;
     }
 
-    public void setAuxMapa(int[][] auxMapa) {
-        this.auxMapa = auxMapa;
+    public void setSolucionMapa(int[][] solucionMapa) {
+        this.solucionMapa = solucionMapa;
     }
 
     public int getBalas() {
