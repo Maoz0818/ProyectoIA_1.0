@@ -48,7 +48,6 @@ public Mapa(File flMapa) {
         int numlinea = 0;
         FileReader fr = null;
         BufferedReader br;
-        
         int intFila = 0, intColumna = 0;
 
         try {
@@ -61,20 +60,19 @@ public Mapa(File flMapa) {
                 intColumna = linea.split(delimitador).length;
             }
 
-
             fr = new FileReader(flMapa);
             br = new BufferedReader(fr);
 
-            this.filas = intFila;
+            this.filas = intFila-1;
             this.columnas = intColumna;
 
-            this.mapa = new int[intFila][intColumna];
-            this.solucionMapa = new int[intFila][intColumna];
+            this.mapa = new int[intFila-1][intColumna];
+            this.solucionMapa = new int[intFila-1][intColumna];
             
             intFila = 0;
             while ((linea = br.readLine()) != null) {
                 String[] strColumn = linea.split(delimitador);
-                if(numlinea != 0){
+                if(numlinea > 0){
                     for (int i = 0; i < strColumn.length; i++) {
                         int posInicial = Integer.parseInt(strColumn[i]);
                         if (posInicial == ROBOT) {

@@ -187,7 +187,7 @@ public class AlgoritmosDeBusqueda {
         hijos=new LinkedList();
         
         //Acción arriba
-        if(posX-1 >= 0 && posX-1 < 10 && posY >= 0 && posY < 10 && mapa.getMapa()[posX-1][posY] != 1 && nodo.eviteDevolverse(nodo, posX-1, posY)){
+        if(posX-1 >= 0 && posX-1 < mapa.getMapa().length && posY >= 0 && posY < mapa.getMapa()[0].length && mapa.getMapa()[posX-1][posY] != 1 && nodo.eviteDevolverse(nodo, posX-1, posY)){
             int[] estado = new int[2];
             estado[0] = posX-1;
             estado[1] = posY;
@@ -217,7 +217,7 @@ public class AlgoritmosDeBusqueda {
         }
         
         //Accion derecha
-        if(posX >= 0 && posX < 10 && posY+1 >= 0 && posY+1 < 10 && mapa.getMapa()[posX][posY+1] != 1 && nodo.eviteDevolverse(nodo, posX, posY+1)){
+        if(posX >= 0 && posX < mapa.getMapa().length && posY+1 >= 0 && posY+1 < mapa.getMapa()[0].length && mapa.getMapa()[posX][posY+1] != 1 && nodo.eviteDevolverse(nodo, posX, posY+1)){
             int[] estado = new int[2];
             estado[0] = posX;
             estado[1] = posY+1;
@@ -247,7 +247,7 @@ public class AlgoritmosDeBusqueda {
         }
         
         //Accion abajo
-        if(posX+1 >= 0 && posX+1 < 10 && posY >= 0 && posY < 10 && mapa.getMapa()[posX+1][posY] != 1 && nodo.eviteDevolverse(nodo, posX+1, posY)){
+        if(posX+1 >= 0 && posX+1 < mapa.getMapa().length && posY >= 0 && posY < mapa.getMapa()[0].length && mapa.getMapa()[posX+1][posY] != 1 && nodo.eviteDevolverse(nodo, posX+1, posY)){
             int[] estado = new int[2];
             estado[0] = posX+1;
             estado[1] = posY;
@@ -277,7 +277,7 @@ public class AlgoritmosDeBusqueda {
         }
         
         //Accion izquierda
-        if(posX >= 0 && posX < 10 && posY-1 >= 0 && posY-1 < 10 && mapa.getMapa()[posX][posY-1] != 1 && nodo.eviteDevolverse(nodo, posX, posY-1)){
+        if(posX >= 0 && posX < mapa.getMapa().length && posY-1 >= 0 && posY-1 < mapa.getMapa()[0].length && mapa.getMapa()[posX][posY-1] != 1 && nodo.eviteDevolverse(nodo, posX, posY-1)){
             int[] estado = new int[2];
             estado[0] = posX;
             estado[1] = posY-1;
@@ -316,7 +316,7 @@ public class AlgoritmosDeBusqueda {
         hijos=new LinkedList();
         
         //Acción arriba
-        if(posX-1 >= 0 && posX-1 < 10 && posY >= 0 && posY < 10 && mapa.getMapa()[posX-1][posY] != 1 && !nodo.evitarCiclos(nodo, posX-1, posY)){
+        if(posX-1 >= 0 && posX-1 < mapa.getMapa().length && posY >= 0 && posY < mapa.getMapa()[0].length && mapa.getMapa()[posX-1][posY] != 1 && !nodo.evitarCiclos(nodo, posX-1, posY)){
             int[] estado = new int[2];
             estado[0] = posX-1;
             estado[1] = posY;
@@ -343,7 +343,7 @@ public class AlgoritmosDeBusqueda {
         }
         
         //Accion derecha
-        if(posX >= 0 && posX < 10 && posY+1 >= 0 && posY+1 < 10 && mapa.getMapa()[posX][posY+1] != 1 && !nodo.evitarCiclos(nodo, posX, posY+1)){
+        if(posX >= 0 && posX < mapa.getMapa().length && posY+1 >= 0 && posY+1 < mapa.getMapa()[0].length && mapa.getMapa()[posX][posY+1] != 1 && !nodo.evitarCiclos(nodo, posX, posY+1)){
             int[] estado = new int[2];
             estado[0] = posX;
             estado[1] = posY+1;
@@ -370,7 +370,7 @@ public class AlgoritmosDeBusqueda {
         }
         
         //Accion abajo
-        if(posX+1 >= 0 && posX+1 < 10 && posY >= 0 && posY < 10 && mapa.getMapa()[posX+1][posY] != 1 && !nodo.evitarCiclos(nodo, posX+1, posY)){
+        if(posX+1 >= 0 && posX+1 < mapa.getMapa().length && posY >= 0 && posY < mapa.getMapa()[0].length && mapa.getMapa()[posX+1][posY] != 1 && !nodo.evitarCiclos(nodo, posX+1, posY)){
             int[] estado = new int[2];
             estado[0] = posX+1;
             estado[1] = posY;
@@ -397,7 +397,7 @@ public class AlgoritmosDeBusqueda {
         }
         
         //Accion izquierda
-        if(posX >= 0 && posX < 10 && posY-1 >= 0 && posY-1 < 10 && mapa.getMapa()[posX][posY-1] != 1 && !nodo.evitarCiclos(nodo, posX, posY-1)){
+        if(posX >= 0 && posX < mapa.getMapa().length && posY-1 >= 0 && posY-1 < mapa.getMapa()[0].length && mapa.getMapa()[posX][posY-1] != 1 && !nodo.evitarCiclos(nodo, posX, posY-1)){
             int[] estado = new int[2];
             estado[0] = posX;
             estado[1] = posY-1;

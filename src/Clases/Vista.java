@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -40,7 +39,7 @@ public class Vista implements ActionListener, MouseListener{
     public static final int OBJETIVO = 4;
     
     JFrame jfVentana;
-    JPanel panelCentro, panelOpciones, panelSolucion;
+    JPanel panelCentro, panelOpciones, panelSolucion, panelFondo;
     ImagePanel panelMapa, panelInicio;
     JComboBox cbxBusqueda, cbxAlgoritmo;
     JButton btnBuscar, btnEjecutar, btnSimulacion, btnResetMapa;
@@ -54,7 +53,7 @@ public class Vista implements ActionListener, MouseListener{
     public void init() {
         jfVentana = new JFrame("Metodos de Busqueda");
         jfVentana.setLayout(new MigLayout());
-        
+                
         JLabel lblTitle = new JLabel("<html><span style='font-size:3em'>Proyecto IA</span></html>");
         lblTitle.setHorizontalAlignment(JLabel.CENTER);
         lblTitle.setVerticalAlignment(JLabel.CENTER);
@@ -62,7 +61,7 @@ public class Vista implements ActionListener, MouseListener{
         JLabel lblIco = new JLabel();
         ImageIcon imgIcoUV = new ImageIcon(this.getClass().getResource("/images/logounivalle.png"));
         Image image = imgIcoUV.getImage();
-        Image newimg = image.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
+        Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
         imgIcoUV = new ImageIcon(newimg);
         lblIco.setBackground(Color.WHITE);
         lblIco.setIcon(imgIcoUV);
@@ -70,11 +69,20 @@ public class Vista implements ActionListener, MouseListener{
         JLabel lblIco2 = new JLabel();
         ImageIcon imgFondo = new ImageIcon(this.getClass().getResource("/images/fondoMapa.png"));
         Image imageFondo = imgFondo.getImage();
-        Image newimg2 = imageFondo.getScaledInstance(60, 60, java.awt.Image.SCALE_SMOOTH);
+        Image newimg2 = imageFondo.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
         imgFondo = new ImageIcon(newimg2);
         lblIco2.setBackground(Color.WHITE);
         lblIco2.setIcon(imgFondo);
+               
+        ImageIcon imgFondoVentana = new ImageIcon(this.getClass().getResource("/images/fondoMapa.jpg"));
+        image = imgFondoVentana.getImage();
+        newimg = image.getScaledInstance(1100, 650, java.awt.Image.SCALE_SMOOTH);
+        imgFondoVentana = new ImageIcon(newimg);
+        panelFondo = new ImagePanel(imgFondoVentana.getImage());
+        //panelFondo.setPreferredSize(preferredSize);
+        panelFondo.setLayout(new MigLayout());
         
+        //jfVentana.add(panelFondo);        
         jfVentana.add(lblIco);
         jfVentana.add(lblTitle, "wrap 5, growy, width max(100%)");
 
@@ -228,7 +236,7 @@ public class Vista implements ActionListener, MouseListener{
                         break;
                 }
                 Image image = imgIcoUV.getImage();
-                Image newimg = image.getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
+                Image newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
                 imgIcoUV = new ImageIcon(newimg);
                 lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 lbl.setIcon(imgIcoUV);
@@ -283,9 +291,9 @@ public class Vista implements ActionListener, MouseListener{
     
     public void construirMapaSolucion() {
         ArrayList<Nodo> strCamino = nodo.getCamino();
-        int[][] matriz_solucion = new int[mp.solucionMapa[0].length][mp.solucionMapa[0].length];
+        int[][] matriz_solucion = new int[mp.solucionMapa.length][mp.solucionMapa[0].length];
         
-        for (int i=0; i < mp.solucionMapa[0].length; i++) {
+        for (int i=0; i < mp.solucionMapa.length; i++) {
             System.arraycopy(mp.solucionMapa[i], 0, matriz_solucion[i], 0, mp.solucionMapa[0].length);
         }
                 
@@ -295,12 +303,12 @@ public class Vista implements ActionListener, MouseListener{
 
         panelMapa.removeAll();
         panelMapa.updateUI();
-        panelMapa.setLayout(new GridLayout(matriz_solucion.length, matriz_solucion.length));
+        panelMapa.setLayout(new GridLayout(matriz_solucion.length, matriz_solucion[0].length));
         JLabel lbl;
         ImageIcon imgIcoUV = new ImageIcon();
         hmLabels = new HashMap<>();
         for (int i = 0; i < matriz_solucion.length; i++) {
-            for (int j = 0; j < matriz_solucion.length; j++) {
+            for (int j = 0; j < matriz_solucion[0].length; j++) {
                 lbl = new JLabel();
                 lbl.setToolTipText(i + "," + j);
                 switch (matriz_solucion[i][j]) {
@@ -324,7 +332,7 @@ public class Vista implements ActionListener, MouseListener{
                         break;
                 }
                 Image image = imgIcoUV.getImage();
-                Image newimg = image.getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
+                Image newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
                 imgIcoUV = new ImageIcon(newimg);
                 lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 lbl.setIcon(imgIcoUV);
@@ -424,7 +432,7 @@ public class Vista implements ActionListener, MouseListener{
                         case Mapa.ROBOT_ENEMIGO:
                             imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
                             image = imgIcoUV.getImage();
-                            newimg = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+                            newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
                             imgIcoUV = new ImageIcon(newimg);
                             lblAnteriror.setIcon(imgIcoUV);
                             break;
@@ -460,7 +468,7 @@ public class Vista implements ActionListener, MouseListener{
                         
                     }
                     image = imgIcoUV.getImage();
-                    newimg = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+                    newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
                     imgIcoUV = new ImageIcon(newimg);
                     lbl.setIcon(imgIcoUV);
                     
