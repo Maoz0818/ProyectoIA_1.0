@@ -14,8 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -283,6 +281,61 @@ public class Vista implements ActionListener, MouseListener{
         panelInicio.updateUI();
     }
     
+    public void construirMapaSolucion() {
+        ArrayList<Nodo> strCamino = nodo.getCamino();
+        int[][] matriz_solucion = new int[mp.solucionMapa[0].length][mp.solucionMapa[0].length];
+        
+        for (int i=0; i < mp.solucionMapa[0].length; i++) {
+            System.arraycopy(mp.solucionMapa[i], 0, matriz_solucion[i], 0, mp.solucionMapa[0].length);
+        }
+                
+        for (int i = 0; i < strCamino.size()-1; i++) {
+            matriz_solucion[strCamino.get(i).getEstado()[0]][strCamino.get(i).getEstado()[1]] = 7;
+        }
+
+        panelMapa.removeAll();
+        panelMapa.updateUI();
+        panelMapa.setLayout(new GridLayout(matriz_solucion.length, matriz_solucion.length));
+        JLabel lbl;
+        ImageIcon imgIcoUV = new ImageIcon();
+        hmLabels = new HashMap<>();
+        for (int i = 0; i < matriz_solucion.length; i++) {
+            for (int j = 0; j < matriz_solucion.length; j++) {
+                lbl = new JLabel();
+                lbl.setToolTipText(i + "," + j);
+                switch (matriz_solucion[i][j]) {
+                    case Mapa.OBSTACULO:
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/muro.png"));
+                        break;
+                    case Mapa.ROBOT:
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                        break;
+                    case Mapa.ROBOT_ENEMIGO:
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
+                        break;
+                    case Mapa.OBJETIVO:
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.png"));
+                        break;
+                    case Mapa.CAMINO:
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/camino.png"));
+                        break;
+                    case 0:
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
+                        break;
+                }
+                Image image = imgIcoUV.getImage();
+                Image newimg = image.getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
+                imgIcoUV = new ImageIcon(newimg);
+                lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                lbl.setIcon(imgIcoUV);
+                lbl.setHorizontalAlignment(JLabel.CENTER);
+                hmLabels.put(i + "," + j, lbl);
+                panelMapa.add(lbl);
+            }
+        }
+        panelMapa.updateUI();
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cbxBusqueda) {
@@ -322,12 +375,12 @@ public class Vista implements ActionListener, MouseListener{
             if (mp == null) {
                 JOptionPane.showMessageDialog(jfVentana, "No se ha cargado un mapa");
             } else {
+                    reporte();
                     construirMapaSolucion();
-                    //reporte();
             }
         } else if (e.getSource() == btnSimulacion) {
-            //construirMapa();
-            //simulacion();
+            construirMapa();
+            simulacion();
         }
     }
     
@@ -350,7 +403,7 @@ public class Vista implements ActionListener, MouseListener{
         
         ArrayList<Nodo> strCamino = nodo.getCamino();
                 
-        int delay = 300;
+        int delay = 400;
         new Timer(delay, new ActionListener() {
             private int i = 0;
             int[] strAnt = mp.getEstadoInicial();
@@ -419,53 +472,6 @@ public class Vista implements ActionListener, MouseListener{
                 i++;
             }
         }).start();
-    }
-    
-    public void construirMapaSolucion() {
-        AlgoritmosDeBusqueda objAlgoritmos = new AlgoritmosDeBusqueda(mp);
-        int intAlgoritmo = ((Item) cbxAlgoritmo.getSelectedItem()).getId();
-        Nodo nodo2 = objAlgoritmos.init(intAlgoritmo);
-        ArrayList<Nodo> strCamino = nodo2.getCamino();
-        Arrays.asList(strCamino).forEach(n -> System.out.print(n + " "));
-
-//        panelMapa.removeAll();
-//        panelMapa.updateUI();
-//        panelMapa.setLayout(new GridLayout(mp.filas, mp.columnas));
-//        JLabel lbl;
-//        ImageIcon imgIcoUV = new ImageIcon();
-//        hmLabels = new HashMap<>();
-//        for (int i = 0; i < mp.getMapa().length; i++) {
-//            for (int j = 0; j < mp.getMapa()[i].length; j++) {
-//                lbl = new JLabel();
-//                lbl.setToolTipText(i + "," + j);
-//                switch (mp.mapa[i][j]) {
-//                    case Mapa.OBSTACULO:
-//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/muro.png"));
-//                        break;
-//                    case Mapa.ROBOT:
-//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
-//                        break;
-//                    case Mapa.ROBOT_ENEMIGO:
-//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
-//                        break;
-//                    case Mapa.OBJETIVO:
-//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.png"));
-//                        break;
-//                    case 0:
-//                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
-//                        break;
-//                }
-//                Image image = imgIcoUV.getImage();
-//                Image newimg = image.getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH);
-//                imgIcoUV = new ImageIcon(newimg);
-//                lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-//                lbl.setIcon(imgIcoUV);
-//                lbl.setHorizontalAlignment(JLabel.CENTER);
-//                hmLabels.put(i + "," + j, lbl);
-//                panelMapa.add(lbl);
-//            }
-//        }
-//        panelMapa.updateUI();
     }
     
     @Override

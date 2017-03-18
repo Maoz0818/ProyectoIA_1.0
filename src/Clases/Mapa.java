@@ -13,6 +13,7 @@ public class Mapa implements Cloneable {
     public static final int ROBOT = 2;
     public static final int ROBOT_ENEMIGO = 3;
     public static final int OBJETIVO = 4;
+    public static final int CAMINO = 7;
 
     public static final int COSTO_NORMAL = 1;
     public static final int COSTO_ENEMIGO = 4;
