@@ -17,8 +17,17 @@ public class Nodo implements Comparable<Nodo> {
     private int compare = 0;
     private int nodosCreados = 0;
     private int nodosExpandidos = 0;
+    private boolean disparo = false;
     
     public Nodo(){}
+
+    public boolean isDisparo() {
+        return disparo;
+    }
+
+    public void setDisparo(boolean disparo) {
+        this.disparo = disparo;
+    }
 
     public int getNodosCreados() {
         return nodosCreados;

@@ -197,15 +197,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("arriba");
             if(mapa.getMapa()[posX-1][posY] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX-1][posY] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }
@@ -227,15 +228,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("derecha");
             if(mapa.getMapa()[posX][posY+1] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX][posY+1] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }
@@ -257,12 +259,13 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("abajo");
             if(mapa.getMapa()[posX+1][posY] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX+1][posY] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
                     hijo.setCosto(nodo.getCosto()+1);
@@ -287,15 +290,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("izquierda");
             if(mapa.getMapa()[posX][posY-1] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX][posY-1] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }
@@ -326,15 +330,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("arriba");
             if(mapa.getMapa()[posX-1][posY] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX-1][posY] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }
@@ -353,15 +358,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("derecha");
             if(mapa.getMapa()[posX][posY+1] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX][posY+1] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }
@@ -380,15 +386,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("abajo");
             if(mapa.getMapa()[posX+1][posY] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX+1][posY] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }
@@ -407,15 +414,16 @@ public class AlgoritmosDeBusqueda {
             hijo.setPadre(nodo);
             hijo.setOperador("izquierda");
             if(mapa.getMapa()[posX][posY-1] == 3 && nodo.getBalas() != 0){
-                hijo.setCosto(nodo.getCosto()+1);
+                hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                 hijo.setBalas(nodo.getBalas());
                 hijo.setBalas(hijo.getBalas()-1);
+                hijo.setDisparo(true);
             }else{
                 if(mapa.getMapa()[posX][posY-1] == 3 && nodo.getBalas() == 0){
-                    hijo.setCosto(nodo.getCosto()+1+4);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL+Mapa.COSTO_ENEMIGO);
                     hijo.setBalas(nodo.getBalas());
                 }else{
-                    hijo.setCosto(nodo.getCosto()+1);
+                    hijo.setCosto(nodo.getCosto()+Mapa.COSTO_NORMAL);
                     hijo.setBalas(nodo.getBalas());
                 }
             }

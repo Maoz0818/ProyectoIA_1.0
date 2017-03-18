@@ -27,19 +27,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import net.miginfocom.swing.MigLayout;
 
 public class Vista implements ActionListener, MouseListener{
-        
+    
+    // variables enteras que representan los objetos del mapa
     public static final int LIBRE = 0;
     public static final int OBSTACULO = 1;
     public static final int ROBOT = 2;
     public static final int ROBOT_ENEMIGO = 3;
     public static final int OBJETIVO = 4;
     
+    // Todo lo necesario para armar la ventana
     JFrame jfVentana;
-    JPanel panelCentro, panelOpciones, panelSolucion, panelFondo;
+    JPanel panelCentro, panelOpciones, panelSolucion;
     ImagePanel panelMapa, panelInicio;
     JComboBox cbxBusqueda, cbxAlgoritmo;
     JButton btnBuscar, btnEjecutar, btnSimulacion, btnResetMapa;
@@ -49,12 +53,19 @@ public class Vista implements ActionListener, MouseListener{
     long time;
     Nodo nodo;
     HashMap<String, JLabel> hmLabels;
-        
-    public void init() {
-        jfVentana = new JFrame("Metodos de Busqueda");
+    
+    // Metodo que da inicio al JFrame y carga todo lo necesario en el mismo
+    public void init() {     
+        try {
+		UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+	} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+	}
+        jfVentana = new JFrame("Métodos de Busqueda");
         jfVentana.setLayout(new MigLayout());
+        jfVentana.getContentPane().setBackground(Color.decode("#ffffff"));
                 
-        JLabel lblTitle = new JLabel("<html><span style='font-size:3em'>Proyecto IA</span></html>");
+        JLabel lblTitle = new JLabel("<html><span style='font-size:3em'>Proyecto 1: Robot sapiens</span></html>");
         lblTitle.setHorizontalAlignment(JLabel.CENTER);
         lblTitle.setVerticalAlignment(JLabel.CENTER);
         
@@ -65,36 +76,21 @@ public class Vista implements ActionListener, MouseListener{
         imgIcoUV = new ImageIcon(newimg);
         lblIco.setBackground(Color.WHITE);
         lblIco.setIcon(imgIcoUV);
-        
-        JLabel lblIco2 = new JLabel();
-        ImageIcon imgFondo = new ImageIcon(this.getClass().getResource("/images/fondoMapa.png"));
-        Image imageFondo = imgFondo.getImage();
-        Image newimg2 = imageFondo.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
-        imgFondo = new ImageIcon(newimg2);
-        lblIco2.setBackground(Color.WHITE);
-        lblIco2.setIcon(imgFondo);
-               
-        ImageIcon imgFondoVentana = new ImageIcon(this.getClass().getResource("/images/fondoMapa.jpg"));
-        image = imgFondoVentana.getImage();
-        newimg = image.getScaledInstance(1100, 650, java.awt.Image.SCALE_SMOOTH);
-        imgFondoVentana = new ImageIcon(newimg);
-        panelFondo = new ImagePanel(imgFondoVentana.getImage());
-        //panelFondo.setPreferredSize(preferredSize);
-        panelFondo.setLayout(new MigLayout());
-        
-        //jfVentana.add(panelFondo);        
+                       
         jfVentana.add(lblIco);
         jfVentana.add(lblTitle, "wrap 5, growy, width max(100%)");
 
-        /*Panel Opciones*/
+        //Panel que contiene las opciones
         panelOpciones = new JPanel(new MigLayout());
-        panelOpciones.setBorder(BorderFactory.createTitledBorder("Opciones"));
-        
+        panelOpciones.setBackground(Color.decode("#ffffff"));
+        panelOpciones.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Opciones de Busqueda"));
+                
         JLabel lbl = new JLabel("<html><span style='font-size:1em'>Cargar mapa:</span></html>");
         txtNameFile = new JTextField();
         btnBuscar = new JButton("...");
         btnBuscar.addActionListener(this);
         
+                
         panelOpciones.add(lbl, "wrap");
         panelOpciones.add(txtNameFile, "width max(40%, 40%), growx, growy");
         panelOpciones.add(btnBuscar, "wrap 10");
@@ -115,26 +111,22 @@ public class Vista implements ActionListener, MouseListener{
         panelOpciones.add(lbl, "wrap");
         panelOpciones.add(cbxAlgoritmo, "width max(100%, 100%), growx, growy, wrap 10");
         
-        btnEjecutar = new JButton("Ejecutar");
+        btnEjecutar = new JButton("Ejecutar busqueda");
         btnEjecutar.addActionListener(this);
         
         panelOpciones.add(btnEjecutar, "span, right, wrap 50");
-        /*Panel Opciones*/
 
-        /*Panel Mapa*/
+        // Panel que contiene el mapa principal
         ImageIcon background = new ImageIcon(this.getClass().getResource("/images/fondoMapa.png"));
-        image = background.getImage();
-        newimg = image.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
-        background = new ImageIcon(newimg);
         panelMapa = new ImagePanel(background.getImage());
         panelMapa.setLayout(new GridLayout());
         panelMapa.setPreferredSize(new Dimension(600, 600));
         panelMapa.setVisible(true);
-        /*Panel Mapa*/
 
-        /*Panel Solucion*/
+        // Panel que contiene el reporte
         panelSolucion = new JPanel(new MigLayout());
-        panelSolucion.setBorder(BorderFactory.createTitledBorder("Reporte"));
+        panelSolucion.setBackground(Color.decode("#ffffff"));
+        panelSolucion.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Reporte de Busqueda"));
         panelSolucion.setVisible(true);
         
         lbl = new JLabel("<html><span style='font-size:1em'>Total nodos creados: </span></html>");
@@ -174,25 +166,21 @@ public class Vista implements ActionListener, MouseListener{
         panelSolucion.add(lblBalas, "growx, growy, wrap 15");
         
         lbl = new JLabel("<html><span style='font-size:1em'>Simulación: </span></html>");
-        btnSimulacion = new JButton("Automática");
+        btnSimulacion = new JButton("Recorrer camino");
         btnSimulacion.setHorizontalAlignment(SwingConstants.LEFT);
         btnSimulacion.addActionListener(this);
         panelSolucion.add(lbl, "growx, growy, wrap");
         panelSolucion.add(btnSimulacion, "wrap 10");
-        /*Panel Solucion*/
         
-        /*Panel EstadoInicial*/
+        // Panel que contiene el estado inicial del mapa
         ImageIcon background2 = new ImageIcon(this.getClass().getResource("/images/fondoMapa.png"));
-        imageFondo = background2.getImage();
-        newimg2 = imageFondo.getScaledInstance(250, 250, java.awt.Image.SCALE_SMOOTH);
-        background2 = new ImageIcon(newimg2);
         panelInicio = new ImagePanel(background2.getImage());
         panelInicio.setLayout(new GridLayout());
         panelInicio.setPreferredSize(new Dimension(250, 250));
         panelInicio.setVisible(true);
-        /*Panel EstadoInicial*/
               
         panelCentro = new JPanel(new MigLayout());
+        panelCentro.setBackground(Color.decode("#ffffff"));
         panelCentro.add(panelOpciones, "width max(25%, 25%), growx, growy");
         panelCentro.add(panelMapa, "span 2 2, growx, growy");
         panelCentro.add(panelSolucion, "span 2 2, growx, growy, width max(25%, 25%)");
@@ -204,9 +192,11 @@ public class Vista implements ActionListener, MouseListener{
         jfVentana.setSize(new Dimension(1100, 650));
         jfVentana.setPreferredSize(new Dimension(1100, 650));
         jfVentana.setResizable(false);
+        jfVentana.setLocationRelativeTo(null);
         
     }
     
+    // Metodo que construye el mapa inicial en el panelMapa
     public void construirMapa() {
         panelMapa.removeAll();
         panelMapa.updateUI();
@@ -248,6 +238,7 @@ public class Vista implements ActionListener, MouseListener{
         panelMapa.updateUI();
     }
     
+    // Metodo que construye el mapa inicial 
     public void construirMapaInicial() {
         panelInicio.removeAll();
         panelInicio.updateUI();
@@ -289,6 +280,7 @@ public class Vista implements ActionListener, MouseListener{
         panelInicio.updateUI();
     }
     
+    // Metodo que construye el mapa con el camino encontrado en el panelMapa
     public void construirMapaSolucion() {
         ArrayList<Nodo> strCamino = nodo.getCamino();
         int[][] matriz_solucion = new int[mp.solucionMapa.length][mp.solucionMapa[0].length];
@@ -344,6 +336,7 @@ public class Vista implements ActionListener, MouseListener{
         panelMapa.updateUI();
     }
     
+    // Metodo que asigna las acciones a los distintos botones
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cbxBusqueda) {
@@ -392,6 +385,7 @@ public class Vista implements ActionListener, MouseListener{
         }
     }
     
+    //Metodo que crea el reporte
     public void reporte() {
         AlgoritmosDeBusqueda objAlgoritmos = new AlgoritmosDeBusqueda(mp);
         int intAlgoritmo = ((Item) cbxAlgoritmo.getSelectedItem()).getId();
@@ -407,23 +401,17 @@ public class Vista implements ActionListener, MouseListener{
         lblBalas.setText("" + nodo.getBalas());
     }
     
+    // Metodo que genera la simulación para el recorrido del camino encontrado
     public void simulacion() {
-        
-        ArrayList<Nodo> strCamino = nodo.getCamino();
-                
+        ArrayList<Nodo> strCamino = nodo.getCamino();     
         int delay = 400;
         new Timer(delay, new ActionListener() {
             private int i = 0;
             int[] strAnt = mp.getEstadoInicial();
-            boolean disparo = false;
-            
             @Override
             public void actionPerformed(ActionEvent e) {
                 
                 if (i < strCamino.size()) {
-                    if (mp.valuePosition(strCamino.get(i).getEstado()) == Mapa.ROBOT_ENEMIGO) {
-                        disparo = true;
-                    }
                     JLabel lblAnteriror = hmLabels.get(strAnt[0]+","+strAnt[1]);
                     ImageIcon imgIcoUV;
                     Image image;
@@ -436,13 +424,6 @@ public class Vista implements ActionListener, MouseListener{
                             imgIcoUV = new ImageIcon(newimg);
                             lblAnteriror.setIcon(imgIcoUV);
                             break;
-//                        case Mapa.ELECTROMAGNETICO_2:
-//                            imgIcoUV = new ImageIcon(this.getClass().getResource("/img/toxic.png"));
-//                            image = imgIcoUV.getImage();
-//                            newimg = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
-//                            imgIcoUV = new ImageIcon(newimg);
-//                            lblAnteriror.setIcon(imgIcoUV);
-//                            break;
                         default:
                             lblAnteriror.setIcon(null);
                             break;
@@ -451,16 +432,13 @@ public class Vista implements ActionListener, MouseListener{
                     
                     JLabel lbl = hmLabels.get(strCamino.get(i).getEstado()[0]+","+strCamino.get(i).getEstado()[1]);
                     
-                    if (disparo) {
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                    if (strCamino.get(i).isDisparo()) {
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_laser.png"));
                     } else {
                         switch (mp.valuePosition(strCamino.get(i).getEstado())) {
                             case Mapa.ROBOT_ENEMIGO:
-                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_daño.png"));
                                 break;
-//                            case Mapa.ELECTROMAGNETICO_2:
-//                                imgIcoUV = new ImageIcon(this.getClass().getResource("/img/explotox.png"));
-//                                break;
                             default:
                                 imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
                                 break;
@@ -508,7 +486,7 @@ public class Vista implements ActionListener, MouseListener{
 
     }
 
-    /* Para key value de JComboBox*/
+    // Para key value de JComboBox
     class ItemRenderer extends BasicComboBoxRenderer {       
         @Override
         @SuppressWarnings("null")
@@ -527,9 +505,7 @@ public class Vista implements ActionListener, MouseListener{
             return this;
         }
     }
-    
     class Item {
-        
         private int id;
         private String description;
         
@@ -552,8 +528,8 @@ public class Vista implements ActionListener, MouseListener{
         }
     }
 
-    /* Para key value de JComboBox*/
-    /* clase para poner imagen de fondo a JPanel*/
+    // Para key value de JComboBox
+    // clase para poner imagen de fondo a JPanel
     class ImagePanel extends JPanel {
         
         private Image img;
