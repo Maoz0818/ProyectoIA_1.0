@@ -121,6 +121,7 @@ public class Vista implements ActionListener, MouseListener{
         panelMapa = new ImagePanel(background.getImage());
         panelMapa.setLayout(new GridLayout());
         panelMapa.setPreferredSize(new Dimension(600, 600));
+        panelMapa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panelMapa.setVisible(true);
 
         // Panel que contiene el reporte
@@ -177,6 +178,7 @@ public class Vista implements ActionListener, MouseListener{
         panelInicio = new ImagePanel(background2.getImage());
         panelInicio.setLayout(new GridLayout());
         panelInicio.setPreferredSize(new Dimension(250, 250));
+        panelInicio.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panelInicio.setVisible(true);
               
         panelCentro = new JPanel(new MigLayout());
@@ -216,17 +218,17 @@ public class Vista implements ActionListener, MouseListener{
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
                         break;
                     case Mapa.ROBOT_ENEMIGO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.gif"));
                         break;
                     case Mapa.OBJETIVO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.gif"));
                         break;
                     case 0:
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
                         break;
                 }
                 Image image = imgIcoUV.getImage();
-                Image newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
+                Image newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_REPLICATE);
                 imgIcoUV = new ImageIcon(newimg);
                 lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 lbl.setIcon(imgIcoUV);
@@ -311,20 +313,20 @@ public class Vista implements ActionListener, MouseListener{
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
                         break;
                     case Mapa.ROBOT_ENEMIGO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.gif"));
                         break;
                     case Mapa.OBJETIVO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/meta.gif"));
                         break;
                     case Mapa.CAMINO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/camino.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/camino.gif"));
                         break;
                     case 0:
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
                         break;
                 }
                 Image image = imgIcoUV.getImage();
-                Image newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
+                Image newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_REPLICATE);
                 imgIcoUV = new ImageIcon(newimg);
                 lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 lbl.setIcon(imgIcoUV);
@@ -418,9 +420,9 @@ public class Vista implements ActionListener, MouseListener{
                     Image newimg;
                     switch (mp.valuePosition(strAnt)) {
                         case Mapa.ROBOT_ENEMIGO:
-                            imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
+                            imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.gif"));
                             image = imgIcoUV.getImage();
-                            newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
+                            newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_REPLICATE);
                             imgIcoUV = new ImageIcon(newimg);
                             lblAnteriror.setIcon(imgIcoUV);
                             break;
