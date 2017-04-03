@@ -49,7 +49,7 @@ public class Vista implements ActionListener, MouseListener{
     JButton btnBuscar, btnEjecutar, btnSimulacion, btnResetMapa;
     Mapa mp;
     JTextField txtNameFile;
-    JLabel lblNodosExpandidos, lblProfundidad, lblTiempo, lblCosto, lblNodosCreados, lblBalas;
+    JLabel lblNodosExpandidos, lblProfundidad, lblTiempo, lblCosto, lblNodosCreados, lblBalas, lblBalasIniciales;
     long time;
     Nodo nodo;
     HashMap<String, JLabel> hmLabels;
@@ -144,7 +144,7 @@ public class Vista implements ActionListener, MouseListener{
         
         lbl = new JLabel("<html><span style='font-size:1em'>Profundidad: </span></html>");
         lblProfundidad = new JLabel("<html><span style='font-size:1em'>0</span></html>");
-        
+            
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblProfundidad, "growx, growy, wrap");
         
@@ -159,6 +159,12 @@ public class Vista implements ActionListener, MouseListener{
         
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblTiempo, "growx, growy, wrap");
+        
+        lbl = new JLabel("<html><span style='font-size:1em'>Balas iniciales: </span></html>");
+        lblBalasIniciales = new JLabel("<html><span style='font-size:1em'>0</span></html>");
+        
+        panelSolucion.add(lbl, "growx, growy");
+        panelSolucion.add(lblBalasIniciales, "growx, growy, wrap");
         
         lbl = new JLabel("<html><span style='font-size:1em'>Balas restantes: </span></html>");
         lblBalas = new JLabel("<html><span style='font-size:1em'>0</span></html>");
@@ -400,6 +406,7 @@ public class Vista implements ActionListener, MouseListener{
         lblProfundidad.setText("" + nodo.getProfundidad());
         lblCosto.setText("" + nodo.getCosto());
         lblTiempo.setText("" + time + "ms");
+        lblBalasIniciales.setText("" + mp.getBalas());
         lblBalas.setText("" + nodo.getBalas());
     }
     
