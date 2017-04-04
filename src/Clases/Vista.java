@@ -1,8 +1,10 @@
 package Clases;
 
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -29,8 +31,10 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import net.miginfocom.swing.MigLayout;
+
 
 public class Vista implements ActionListener, MouseListener{
     
@@ -49,10 +53,12 @@ public class Vista implements ActionListener, MouseListener{
     JButton btnBuscar, btnEjecutar, btnSimulacion, btnResetMapa;
     Mapa mp;
     JTextField txtNameFile;
-    JLabel lblNodosExpandidos, lblProfundidad, lblTiempo, lblCosto, lblNodosCreados, lblBalas;
+    JLabel lblNodosExpandidos, lblProfundidad, lblTiempo, lblCosto, lblNodosCreados, lblBalas, lblBalasIniciales;
     long time;
     Nodo nodo;
     HashMap<String, JLabel> hmLabels;
+    GestionSonido Recurso = new GestionSonido(); 
+    AudioClip disparo,intro,meta,ladrar;
     
     // Metodo que da inicio al JFrame y carga todo lo necesario en el mismo
     public void init() {     
@@ -63,16 +69,16 @@ public class Vista implements ActionListener, MouseListener{
 	}
         jfVentana = new JFrame("Métodos de Busqueda");
         jfVentana.setLayout(new MigLayout());
-        jfVentana.getContentPane().setBackground(Color.decode("#ffffff"));
+        jfVentana.getContentPane().setBackground(Color.decode("#000000"));
                 
-        JLabel lblTitle = new JLabel("<html><span style='font-size:3em'>Proyecto 1: Robot sapiens</span></html>");
+        JLabel lblTitle = new JLabel("<html><span style='font-size:3em'><font color='white'>Proyecto 1: Dog sapiens</font></span></html>");
         lblTitle.setHorizontalAlignment(JLabel.CENTER);
         lblTitle.setVerticalAlignment(JLabel.CENTER);
         
         JLabel lblIco = new JLabel();
-        ImageIcon imgIcoUV = new ImageIcon(this.getClass().getResource("/images/logounivalle.png"));
+        ImageIcon imgIcoUV = new ImageIcon(this.getClass().getResource("/images/logounivalle.gif"));
         Image image = imgIcoUV.getImage();
-        Image newimg = image.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+        Image newimg = image.getScaledInstance(60, 80, java.awt.Image.SCALE_REPLICATE);
         imgIcoUV = new ImageIcon(newimg);
         lblIco.setBackground(Color.WHITE);
         lblIco.setIcon(imgIcoUV);
@@ -80,12 +86,13 @@ public class Vista implements ActionListener, MouseListener{
         jfVentana.add(lblIco);
         jfVentana.add(lblTitle, "wrap 5, growy, width max(100%)");
 
-        //Panel que contiene las opciones
+        //Panel que contiene las opciones   
         panelOpciones = new JPanel(new MigLayout());
-        panelOpciones.setBackground(Color.decode("#ffffff"));
-        panelOpciones.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Opciones de Busqueda"));
+        panelOpciones.setBackground(Color.decode("#000000"));
+         
+        panelOpciones.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Opciones de Busqueda",0,0,new Font("arial",Font.BOLD,12),Color.WHITE));
                 
-        JLabel lbl = new JLabel("<html><span style='font-size:1em'>Cargar mapa:</span></html>");
+        JLabel lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Cargar mapa:</font></span></html>");
         txtNameFile = new JTextField();
         btnBuscar = new JButton("...");
         btnBuscar.addActionListener(this);
@@ -95,7 +102,7 @@ public class Vista implements ActionListener, MouseListener{
         panelOpciones.add(txtNameFile, "width max(40%, 40%), growx, growy");
         panelOpciones.add(btnBuscar, "wrap 10");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Tipo de búsqueda:</span></html>");
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Tipo de búsqueda:</font></span></html>");
         String[] strBusqueda = {"Seleccione una opción", "Búsqueda no informada", "Búsqueda informada"};
         cbxBusqueda = new JComboBox(strBusqueda);
         cbxBusqueda.addActionListener(this);
@@ -103,7 +110,7 @@ public class Vista implements ActionListener, MouseListener{
         panelOpciones.add(lbl, "wrap");
         panelOpciones.add(cbxBusqueda, "width max(100%, 100%), growx, growy, wrap 10");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Algoritmo:</span></html>");
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Algoritmo:</font></span></html>");
         cbxAlgoritmo = new JComboBox(strBusqueda);
         cbxAlgoritmo.addActionListener(this);
         cbxAlgoritmo.setEnabled(false);
@@ -113,76 +120,82 @@ public class Vista implements ActionListener, MouseListener{
         
         btnEjecutar = new JButton("Ejecutar busqueda");
         btnEjecutar.addActionListener(this);
-        
-        panelOpciones.add(btnEjecutar, "span, right, wrap 50");
+          
+        panelOpciones.add(btnEjecutar, "span, center, wrap 50");
 
         // Panel que contiene el mapa principal
         ImageIcon background = new ImageIcon(this.getClass().getResource("/images/fondoMapa.png"));
         panelMapa = new ImagePanel(background.getImage());
         panelMapa.setLayout(new GridLayout());
         panelMapa.setPreferredSize(new Dimension(600, 600));
-        panelMapa.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelMapa.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         panelMapa.setVisible(true);
 
         // Panel que contiene el reporte
         panelSolucion = new JPanel(new MigLayout());
-        panelSolucion.setBackground(Color.decode("#ffffff"));
-        panelSolucion.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Reporte de Busqueda"));
+        panelSolucion.setBackground(Color.decode("#000000"));
+        panelSolucion.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE),"Reporte de Busqueda",0,0,new Font("arial",Font.BOLD,12),Color.WHITE));
         panelSolucion.setVisible(true);
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Total nodos creados: </span></html>");
-        lblNodosCreados = new JLabel("<html><span style='font-size:1em'>0</span></html>");
-        
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Total nodos creados:</font> </span></html>");
+        lblNodosCreados = new JLabel("<html><span style='font-size:1em'><font color='white'>0</font></span></html>");
+        lblNodosCreados.setForeground(Color.WHITE);
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblNodosCreados, "growx, growy, wrap");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Total nodos expandidos: </span></html>");
-        lblNodosExpandidos = new JLabel("<html><span style='font-size:1em'>0</span></html>");
-        
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Total nodos expandidos:</font> </span></html>");
+        lblNodosExpandidos = new JLabel("<html><span style='font-size:1em'><font color='white'>0</font></span></html>");
+        lblNodosExpandidos.setForeground(Color.WHITE);
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblNodosExpandidos, "growx, growy, wrap");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Profundidad: </span></html>");
-        lblProfundidad = new JLabel("<html><span style='font-size:1em'>0</span></html>");
-        
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Profundidad:</font> </span></html>");
+        lblProfundidad = new JLabel("<html><span style='font-size:1em'><font color='white'>0</font></span></html>");
+        lblProfundidad.setForeground(Color.WHITE);
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblProfundidad, "growx, growy, wrap");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Costo: </span></html>");
-        lblCosto = new JLabel("<html><span style='font-size:1em'>0</span></html>");
-        
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Costo:</font> </span></html>");
+        lblCosto = new JLabel("<html><span style='font-size:1em'><font color='white'>0</font></span></html>");
+        lblCosto.setForeground(Color.WHITE);
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblCosto, "growx, growy, wrap");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Tiempo: </span></html>");
-        lblTiempo = new JLabel("<html><span style='font-size:1em'>0 ms</span></html>");
-        
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Tiempo:</font> </span></html>");
+        lblTiempo = new JLabel("<html><span style='font-size:1em'><font color='white'>0 ms </font></span></html>");
+        lblTiempo.setForeground(Color.WHITE);
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblTiempo, "growx, growy, wrap");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Balas restantes: </span></html>");
-        lblBalas = new JLabel("<html><span style='font-size:1em'>0</span></html>");
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Balas iniciales: </font></span></html>");
+        lblBalasIniciales = new JLabel("<html><span style='font-size:1em'><font color='white'>0</font></span></html>");
+        lblBalasIniciales.setForeground(Color.WHITE);
+        panelSolucion.add(lbl, "growx, growy");
+        panelSolucion.add(lblBalasIniciales, "growx, growy, wrap");
         
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Balas restantes: </font></span></html>");
+        lblBalas = new JLabel("<html><span style='font-size:1em'><font color='white'>0</font></span></html>");
+        lblBalas.setForeground(Color.WHITE);
         panelSolucion.add(lbl, "growx, growy");
         panelSolucion.add(lblBalas, "growx, growy, wrap 15");
         
-        lbl = new JLabel("<html><span style='font-size:1em'>Simulación: </span></html>");
+        lbl = new JLabel("<html><span style='font-size:1em'><font color='white'>Simulación: </font></span></html>");
         btnSimulacion = new JButton("Recorrer camino");
-        btnSimulacion.setHorizontalAlignment(SwingConstants.LEFT);
+        btnSimulacion.setHorizontalAlignment(SwingConstants.CENTER);
         btnSimulacion.addActionListener(this);
         panelSolucion.add(lbl, "growx, growy, wrap");
-        panelSolucion.add(btnSimulacion, "wrap 10");
+        panelSolucion.add(btnSimulacion, "left,wrap 10");
         
         // Panel que contiene el estado inicial del mapa
         ImageIcon background2 = new ImageIcon(this.getClass().getResource("/images/fondoMapa.png"));
         panelInicio = new ImagePanel(background2.getImage());
         panelInicio.setLayout(new GridLayout());
         panelInicio.setPreferredSize(new Dimension(250, 250));
-        panelInicio.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelInicio.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         panelInicio.setVisible(true);
               
         panelCentro = new JPanel(new MigLayout());
-        panelCentro.setBackground(Color.decode("#ffffff"));
+        panelCentro.setBackground(Color.decode("#000000"));
         panelCentro.add(panelOpciones, "width max(25%, 25%), growx, growy");
         panelCentro.add(panelMapa, "span 2 2, growx, growy");
         panelCentro.add(panelSolucion, "span 2 2, growx, growy, width max(25%, 25%)");
@@ -196,6 +209,10 @@ public class Vista implements ActionListener, MouseListener{
         jfVentana.setResizable(false);
         jfVentana.setLocationRelativeTo(null);
         
+        disparo = Recurso.RetornaSonido("/sound/disparo.wav");
+        meta = Recurso.RetornaSonido("/sound/meta.wav");
+        intro = Recurso.RetornaSonido("/sound/intro.wav");
+        ladrar = Recurso.RetornaSonido("/sound/ladrar.wav");
     }
     
     // Metodo que construye el mapa inicial en el panelMapa
@@ -212,16 +229,16 @@ public class Vista implements ActionListener, MouseListener{
                 lbl.setToolTipText(i + "," + j);
                 switch (mp.mapa[i][j]) {
                     case Mapa.OBSTACULO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/muro.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/pasto.png"));
                         break;
                     case Mapa.ROBOT:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/dog.gif"));
                         break;
                     case Mapa.ROBOT_ENEMIGO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.gif"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/duck_malo.gif"));
                         break;
                     case Mapa.OBJETIVO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.gif"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/duck.gif"));
                         break;
                     case 0:
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
@@ -254,16 +271,16 @@ public class Vista implements ActionListener, MouseListener{
                 lbl.setToolTipText(i + "," + j);
                 switch (mp.mapa[i][j]) {
                     case Mapa.OBSTACULO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/muro.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/pasto.png"));
                         break;
                     case Mapa.ROBOT:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/dog.png"));
                         break;
                     case Mapa.ROBOT_ENEMIGO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/duck_malo.png"));
                         break;
                     case Mapa.OBJETIVO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/item.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/duck.png"));
                         break;
                     case 0:
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/libre.png"));
@@ -284,6 +301,7 @@ public class Vista implements ActionListener, MouseListener{
     
     // Metodo que construye el mapa con el camino encontrado en el panelMapa
     public void construirMapaSolucion() {
+        intro.play();
         ArrayList<Nodo> strCamino = nodo.getCamino();
         int[][] matriz_solucion = new int[mp.solucionMapa.length][mp.solucionMapa[0].length];
         
@@ -307,16 +325,16 @@ public class Vista implements ActionListener, MouseListener{
                 lbl.setToolTipText(i + "," + j);
                 switch (matriz_solucion[i][j]) {
                     case Mapa.OBSTACULO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/muro.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/pasto.png"));
                         break;
                     case Mapa.ROBOT:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/dog.gif"));
                         break;
                     case Mapa.ROBOT_ENEMIGO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.gif"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/duck_malo.gif"));
                         break;
                     case Mapa.OBJETIVO:
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/meta.gif"));
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/meta.png"));
                         break;
                     case Mapa.CAMINO:
                         imgIcoUV = new ImageIcon(this.getClass().getResource("/images/camino.gif"));
@@ -365,7 +383,8 @@ public class Vista implements ActionListener, MouseListener{
         } else if (e.getSource() == btnBuscar) {
             JFileChooser selectorArchivos = new JFileChooser();
             selectorArchivos.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt");//filtro de txt
+            selectorArchivos.setFileFilter(filtro);//agrega eel filtro
             int seleccion = selectorArchivos.showOpenDialog(jfVentana);
             
             if (seleccion == JFileChooser.APPROVE_OPTION) {
@@ -395,18 +414,22 @@ public class Vista implements ActionListener, MouseListener{
         nodo = objAlgoritmos.init(intAlgoritmo);
         long time_end = System.currentTimeMillis();
         time = time_end - time_start;
+        
+        
         lblNodosCreados.setText("" + nodo.getNodosCreados());
         lblNodosExpandidos.setText("" + nodo.getNodosExpandidos());
-        lblProfundidad.setText("" + nodo.getProfundidad());
+        lblProfundidad.setText(""+ nodo.getProfundidad());
         lblCosto.setText("" + nodo.getCosto());
         lblTiempo.setText("" + time + "ms");
+        lblBalasIniciales.setText("" + mp.getBalas());
         lblBalas.setText("" + nodo.getBalas());
     }
     
     // Metodo que genera la simulación para el recorrido del camino encontrado
     public void simulacion() {
+        ladrar.play();
         ArrayList<Nodo> strCamino = nodo.getCamino();     
-        int delay = 400;
+        int delay = 500;
         new Timer(delay, new ActionListener() {
             private int i = 0;
             int[] strAnt = mp.getEstadoInicial();
@@ -420,7 +443,7 @@ public class Vista implements ActionListener, MouseListener{
                     Image newimg;
                     switch (mp.valuePosition(strAnt)) {
                         case Mapa.ROBOT_ENEMIGO:
-                            imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_enemigo.gif"));
+                            imgIcoUV = new ImageIcon(this.getClass().getResource("/images/duck_malo.gif"));
                             image = imgIcoUV.getImage();
                             newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_REPLICATE);
                             imgIcoUV = new ImageIcon(newimg);
@@ -435,20 +458,25 @@ public class Vista implements ActionListener, MouseListener{
                     JLabel lbl = hmLabels.get(strCamino.get(i).getEstado()[0]+","+strCamino.get(i).getEstado()[1]);
                     
                     if (strCamino.get(i).isDisparo()) {
-                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_laser.png"));
+                        disparo.play();
+                        imgIcoUV = new ImageIcon(this.getClass().getResource("/images/disparo.png"));
                     } else {
                         switch (mp.valuePosition(strCamino.get(i).getEstado())) {
                             case Mapa.ROBOT_ENEMIGO:
-                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot_daño.png"));
+                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/dog.gif"));
+                                break;
+                            case Mapa.OBJETIVO:
+                                meta.play();
+                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/meta.png"));
                                 break;
                             default:
-                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/robot.png"));
+                                imgIcoUV = new ImageIcon(this.getClass().getResource("/images/dog.gif"));
                                 break;
                         }
                         
                     }
                     image = imgIcoUV.getImage();
-                    newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_SMOOTH);
+                    newimg = image.getScaledInstance(52, 46, java.awt.Image.SCALE_REPLICATE);
                     imgIcoUV = new ImageIcon(newimg);
                     lbl.setIcon(imgIcoUV);
                     
@@ -541,7 +569,6 @@ public class Vista implements ActionListener, MouseListener{
         }
         
         public ImagePanel(Image img) {
-            
             this.img = img;
         }
         

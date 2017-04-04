@@ -33,7 +33,6 @@ public class Mapa implements Cloneable {
     public Mapa clone() throws CloneNotSupportedException {
         try {
             final Mapa result = (Mapa) super.clone();
-            // copy fields that need to be copied here!
             return result;
         } catch (final CloneNotSupportedException ex) {
             throw new AssertionError();
